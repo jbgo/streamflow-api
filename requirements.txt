@@ -1,3 +1,5 @@
 fastapi[all]
 uvicorn[standard]
 pytest
+motor
+responses

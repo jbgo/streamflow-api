@@ -22,6 +22,7 @@ class GaugeConfig(BaseModel):
 
 
 class GaugeData(BaseModel):
+    name: str
     config: GaugeConfig
     data: List[float] = []
 
@@ -29,7 +30,7 @@ GAUGES_URL_TEMPLATE = 'https://waterservices.usgs.gov/nwis/iv/?format=json&sites
 
 def fetch_gauges(gauge_configs: List[GaugeConfig]) -> List[GaugeData]:
     gauges_by_site = OrderedDict(
-        [(conf.usgs_site, GaugeData(config=conf)) for conf in gauge_configs]
+        [(conf.usgs_site, GaugeData(name=conf.name, config=conf)) for conf in gauge_configs]
     )
 
     sites = ','.join(gauges_by_site.keys())

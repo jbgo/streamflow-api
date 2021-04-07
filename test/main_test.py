@@ -1,5 +1,6 @@
 from fastapi.testclient import TestClient
 from main import app
+from test.fixtures import mock_gauges_response
 import pytest
 
 
@@ -12,7 +13,7 @@ def test_root():
     assert resp.json() == {"message": "Welcome to flow.swiftcurrent.com"}
 
 
-def test_gauges():
+def test_gauges(mock_gauges_response):
     resp = client.get("/gauges")
     assert resp.status_code == 200
     assert len(resp.json()['gauges']) == 2
