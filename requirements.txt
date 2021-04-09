@@ -1,5 +1,6 @@
 fastapi[all]
-uvicorn[standard]
+PyMySQL
 pytest
-motor
 responses
+SQLAlchemy
+uvicorn[standard]
