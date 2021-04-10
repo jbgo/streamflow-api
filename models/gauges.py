@@ -1,11 +1,17 @@
 from collections import OrderedDict
-from enum import Enum
+import enum
 from typing import List
 from pydantic import BaseModel
 import requests
 
+import sqlalchemy as sa
+import sqlalchemy.orm
 
-class GaugeVariableEnum(str, Enum):
+
+ORMBase = sa.orm.declarative_base()
+
+
+class GaugeVariableEnum(str, enum.Enum):
     gage_height = 'gage_height'
     discharge = 'discharge'
 
@@ -19,6 +25,15 @@ class GaugeConfig(BaseModel):
     name: str
     usgs_site: str
     preferred_variable: GaugeVariableEnum
+
+
+class GaugeConfigDB(ORMBase):
+    __tablename__ = 'gauge_configs'
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(255), nullable=False)
+    usgs_site = sa.Column(sa.String(32), nullable=False)
+    preferred_variable = sa.Column(sa.Enum(GaugeVariableEnum), nullable=False)
 
 
 class GaugeData(BaseModel):

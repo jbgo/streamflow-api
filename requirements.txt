@@ -1,3 +1,5 @@
+alembic
+black
 fastapi[all]
 PyMySQL[rsa]
 pytest
