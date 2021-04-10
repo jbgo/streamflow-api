@@ -1,6 +1,7 @@
+import json
+
 import pytest
 import responses
-import json
 
 
 @pytest.fixture

@@ -1,9 +1,6 @@
 from logging.config import fileConfig
 
-from sqlalchemy import pool
-
 from alembic import context
-
 import database
 from models.gauges import ORMBase
 
@@ -61,9 +58,7 @@ def run_migrations_online():
     connectable = database.sql_engine()
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()
