@@ -1,5 +1,5 @@
 fastapi[all]
-PyMySQL
+PyMySQL[rsa]
 pytest
 responses
 SQLAlchemy
