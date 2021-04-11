@@ -2,10 +2,12 @@ from models.gauges import fetch_gauges
 from models.gauges import GaugeConfig
 from pydantic import ValidationError
 import pytest
+from test.fixtures import mock_gauges_response
 
 
 def test_gauge_config():
     conf = GaugeConfig(
+        id=42,
         name="Cossatot",
         usgs_site="08061540",
         preferred_variable="gage_height",
@@ -18,6 +20,7 @@ def test_gauge_config():
 def test_gauge_config_validation():
     with pytest.raises(ValidationError):
         conf = GaugeConfig(
+            id=42,
             name="Cossatot",
             usgs_site="08061540",
             preferred_variable="burger",
@@ -27,10 +30,16 @@ def test_gauge_config_validation():
 def test_fetch_gauges(mock_gauges_response):
     configs = [
         GaugeConfig(
-            name="Cossatot", usgs_site="08061540", preferred_variable="gage_height"
+            id=1,
+            name="Cossatot",
+            usgs_site="08061540",
+            preferred_variable="gage_height",
         ),
         GaugeConfig(
-            name="Denton Creek", usgs_site="08055000", preferred_variable="discharge"
+            id=2,
+            name="Denton Creek",
+            usgs_site="08055000",
+            preferred_variable="discharge",
         ),
     ]
     gauges = fetch_gauges(configs)

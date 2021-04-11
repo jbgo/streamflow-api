@@ -1,15 +1,14 @@
-import database
-import sqlalchemy
+from sqlalchemy import text
+
+from database import Session
 
 
-def test_engine():
-    engine = database.sql_engine()
-    assert engine.name == "mysql"
-    assert engine.driver == "pymysql"
-    assert "future" in engine.__module__
+def test_session():
+    with Session() as session:
+        assert not session.autocommit
+        assert not session.autoflush
+        assert session.bind
+        assert session.future
 
-
-def test_connection():
-    with database.sql_connection() as conn:
-        result = conn.execute(sqlalchemy.text("select 'hello world'"))
-        assert "hello world" == result.first()[0]
+        result = session.query(text("'OK'"))
+        assert "OK" == result.first()[0]

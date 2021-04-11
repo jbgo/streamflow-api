@@ -22,10 +22,14 @@ GAUGE_VARIABLE_CODES = {
 }
 
 
-class GaugeConfig(BaseModel):
+class GaugeConfigBase(BaseModel):
     name: str
     usgs_site: str
     preferred_variable: GaugeVariableEnum
+
+
+class GaugeConfigCreate(GaugeConfigBase):
+    pass
 
 
 class GaugeConfigDB(ORMBase):
@@ -35,6 +39,13 @@ class GaugeConfigDB(ORMBase):
     name = sa.Column(sa.String(255), nullable=False)
     usgs_site = sa.Column(sa.String(32), nullable=False)
     preferred_variable = sa.Column(sa.Enum(GaugeVariableEnum), nullable=False)
+
+
+class GaugeConfig(GaugeConfigBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 class GaugeData(BaseModel):

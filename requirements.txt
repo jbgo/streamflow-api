@@ -6,4 +6,3 @@ pytest
 responses
 SQLAlchemy
 uvicorn[standard]
-zimports

@@ -1,6 +1,8 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Depends
+
+from database import Session
 from models.gauges import fetch_gauges
-from models.gauges import GaugeConfig
+from models.gauges import GaugeConfigCreate, GaugeConfig, GaugeConfigDB
 
 
 app = FastAPI()
@@ -15,11 +17,34 @@ async def root():
 async def gauges():
     configs = [
         GaugeConfig(
-            name="Cossatot", usgs_site="08061540", preferred_variable="gage_height"
+            id=1,
+            name="Cossatot",
+            usgs_site="08061540",
+            preferred_variable="gage_height",
         ),
         GaugeConfig(
-            name="Denton Creek", usgs_site="08055000", preferred_variable="discharge"
+            id=2,
+            name="Denton Creek",
+            usgs_site="08055000",
+            preferred_variable="discharge",
         ),
     ]
     gauges = fetch_gauges(configs)
     return dict(gauges=gauges)
+
+
+def get_db():
+    with Session() as session:
+        yield session
+
+
+@app.post("/gauge_configs", status_code=201)
+async def create_gauge_config(
+    gauge_config_create: GaugeConfigCreate, db: Session = Depends(get_db)
+):
+    gc_db = GaugeConfigDB(**gauge_config_create.dict())
+    db.add(gc_db)
+    db.commit()
+    db.refresh(gc_db)
+
+    return gc_db
