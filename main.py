@@ -38,6 +38,11 @@ def get_db():
         yield session
 
 
+@app.get("/gauge_configs")
+async def list_gauge_configs(db: Session = Depends(get_db)):
+    return db.query(GaugeConfigDB).all()
+
+
 @app.post("/gauge_configs", status_code=201)
 async def create_gauge_config(
     gauge_config_create: GaugeConfigCreate, db: Session = Depends(get_db)
