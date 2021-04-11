@@ -1,7 +1,7 @@
 .PHONY: test
 test:
-	pytest
+	/bin/bash -c 'source .env.test && pytest'
 
 .PHONY: serve
 serve:
-	uvicorn main:app --reload
+	/bin/bash -c 'source .env && uvicorn main:app --reload'

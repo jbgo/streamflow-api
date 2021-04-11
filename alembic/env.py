@@ -55,7 +55,7 @@ def run_migrations_online():
     and associate a connection with the context.
 
     """
-    connectable = database.sql_engine()
+    connectable = database.engine
 
     with connectable.connect() as connection:
         context.configure(connection=connection, target_metadata=target_metadata)
