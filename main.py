@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 
-from database import Session
+from database import Session, get_session
 from models.gauges import fetch_gauges
 from models.gauges import GaugeConfigCreate, GaugeConfig, GaugeConfigDB
 
@@ -10,7 +10,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root():
-    return dict(message="Welcome to flow.swiftcurrent.com")
+    return dict(message="Welcome to the Streamflow API")
 
 
 @app.get("/gauges")
@@ -33,19 +33,14 @@ async def gauges():
     return dict(gauges=gauges)
 
 
-def get_db():
-    with Session() as session:
-        yield session
-
-
 @app.get("/gauge_configs")
-async def list_gauge_configs(db: Session = Depends(get_db)):
+async def list_gauge_configs(db: Session = Depends(get_session)):
     return db.query(GaugeConfigDB).all()
 
 
 @app.post("/gauge_configs", status_code=201)
 async def create_gauge_config(
-    gauge_config_create: GaugeConfigCreate, db: Session = Depends(get_db)
+    gauge_config_create: GaugeConfigCreate, db: Session = Depends(get_session)
 ):
     gc_db = GaugeConfigDB(**gauge_config_create.dict())
     db.add(gc_db)

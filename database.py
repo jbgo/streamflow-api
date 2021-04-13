@@ -9,3 +9,9 @@ DB_URL = os.environ["DB_URL"]
 
 engine = create_engine(DB_URL, echo=DB_ECHO, future=True)
 Session = sessionmaker(bind=engine, autocommit=False, autoflush=False, future=True)
+
+
+def get_session():
+    """ Provides a context-managed session for use in path operations. """
+    with Session() as session:
+        yield session

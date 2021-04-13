@@ -20,7 +20,7 @@ def db_setup(db):
 def test_root():
     resp = client.get("/")
     assert resp.status_code == 200
-    assert resp.json() == {"message": "Welcome to flow.swiftcurrent.com"}
+    assert "Welcome" in resp.json()["message"]
 
 
 def test_gauges(mock_gauges_response):
